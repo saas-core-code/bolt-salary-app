@@ -1,6 +1,7 @@
 export const MOCK_USERS = {
   'momo': 'momo29',
   'aoi': 'aoi1021',
+  'test': 'test',
 };
 
 export const REWARD_RATE = 0.6;
