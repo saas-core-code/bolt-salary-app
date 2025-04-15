@@ -1,13 +1,10 @@
-import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar } from 'lucide-react';
 import { useRewards } from '@/hooks/useRewards';
 
 export function RewardCalendar() {
-  // date変数が使用されていない場合の修正
-  // 共有いただいたコードには問題のない別バージョンのようですが、
-  // エラーメッセージに対応した修正を記載します
-  const [, setDate] = useState<Date | undefined>(new Date());
+  // setDateは使われていないので削除
+  // const [, setDate] = useState<Date | undefined>(new Date());
   
   const now = new Date();
   const year = now.getFullYear();
@@ -29,7 +26,10 @@ export function RewardCalendar() {
   
   // Fill in the days of the month
   for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day);
+    // dateが使われていないので、変数宣言自体を削除するか、
+    // または必要な計算だけを行い、変数に代入しない
+    // const date = new Date(year, month, day);
+    
     const hasRecord = records.some(record => {
       const recordDate = new Date(record.date);
       return recordDate.getDate() === day;
