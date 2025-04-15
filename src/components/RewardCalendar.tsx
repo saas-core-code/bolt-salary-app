@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRewards } from '@/hooks/useRewards';
 import { Calendar } from 'lucide-react';
+import { useRewards } from '@/hooks/useRewards';
 
 export function RewardCalendar() {
+  // date変数が使用されていない場合の修正
+  // 共有いただいたコードには問題のない別バージョンのようですが、
+  // エラーメッセージに対応した修正を記載します
+  const [, setDate] = useState<Date | undefined>(new Date());
+  
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();

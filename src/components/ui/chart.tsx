@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
-// 修正: 未使用のインポートを削除またはコメントアウト
-import {
-  NameType,
-  Payload,
-  ValueType,
-} from 'recharts/types/component/DefaultTooltipContent';
+// 未使用のインポートを削除し、使用しているもののみを残す
+// import {
+//   NameType,
+//   Payload,
+//   ValueType,
+// } from 'recharts/types/component/DefaultTooltipContent';
 
 import { cn } from '@/lib/utils';
 

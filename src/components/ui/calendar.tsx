@@ -58,9 +58,9 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // 修正: 未使用のpropsパラメータをアンダースコアに置き換え
+        // propsパラメータが使用されていないのでスプレッド構文を削除
         IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
-        // 修正: 未使用のpropsパラメータをアンダースコアに置き換え
+        // propsパラメータが使用されていないのでスプレッド構文を削除
         IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
       }}
       {...props}
