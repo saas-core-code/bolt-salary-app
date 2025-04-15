@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { useRewards } from '@/hooks/useRewards';
 import { formatCurrency } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calculator, Sparkles } from 'lucide-react';
+import { Calculator, Sparkles, Plus, Minus } from 'lucide-react';
 
 export function RewardSimulator() {
   const [sessions, setSessions] = useState(3);
@@ -28,6 +29,36 @@ export function RewardSimulator() {
   const projectedTotal = selectedMonth === 'this'
     ? currentTotal + (averageReward * sessions)
     : averageReward * sessions;
+
+  // セッション数を増やす
+  const incrementSessions = () => {
+    setSessions(prev => Math.min(prev + 1, 31));
+  };
+
+  // セッション数を減らす
+  const decrementSessions = () => {
+    setSessions(prev => Math.max(prev - 1, 0));
+  };
+
+  // 入力値の変更を処理
+  const handleSessionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // 空文字の場合は変更しない
+    if (value === '') {
+      return;
+    }
+    
+    // 数値に変換
+    const numValue = parseInt(value, 10);
+    
+    // 不正な値でない場合のみステートを更新
+    if (!isNaN(numValue)) {
+      // 0から31の範囲に制限
+      const boundedValue = Math.min(Math.max(0, numValue), 31);
+      setSessions(boundedValue);
+    }
+  };
 
   return (
     <Card className="mt-8">
@@ -75,14 +106,37 @@ export function RewardSimulator() {
             <label className="block text-sm text-muted-foreground mb-2">
               {selectedMonth === 'this' ? 'あと何回配信すると？' : '何回配信する予定？'}
             </label>
-            <Input
-              type="number"
-              min={0}
-              max={31}
-              value={sessions}
-              onChange={(e) => setSessions(Number(e.target.value))}
-              className="max-w-[200px]"
-            />
+            <div className="flex items-center gap-2 max-w-[200px]">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={decrementSessions}
+                disabled={sessions <= 0}
+                className="h-9 w-9 rounded-md"
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              
+              <Input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                max={31}
+                value={sessions}
+                onChange={handleSessionsChange}
+                className="text-center"
+              />
+              
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={incrementSessions}
+                disabled={sessions >= 31}
+                className="h-9 w-9 rounded-md"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
 
