@@ -20,7 +20,8 @@ export function Calculator() {
   const [rate, setRate] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showHistory, setShowHistory] = useState(false);
-  const [lastSavedAmount, setLastSavedAmount] = useState<number | null>(null);
+  // 修正: 変数は使われていないのでアンダースコアで置き換え、セッター関数のみ保持
+  const [, setLastSavedAmount] = useState<number | null>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const user = useAuth((state) => state.user);

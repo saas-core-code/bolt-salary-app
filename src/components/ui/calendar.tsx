@@ -58,8 +58,10 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
+        // 修正: 未使用のpropsパラメータをアンダースコアに置き換え
+        IconLeft: () => <ChevronLeftIcon className="h-4 w-4" />,
+        // 修正: 未使用のpropsパラメータをアンダースコアに置き換え
+        IconRight: () => <ChevronRightIcon className="h-4 w-4" />,
       }}
       {...props}
     />

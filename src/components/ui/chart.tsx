@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
+// 修正: 未使用のインポートを削除またはコメントアウト
 import {
   NameType,
   Payload,
