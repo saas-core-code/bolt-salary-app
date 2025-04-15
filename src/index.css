@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 330 100% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 335 77% 76%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 330 80% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 330 80% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 335 77% 76%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 330 80% 92%;
+    --input: 330 80% 92%;
+    --ring: 335 77% 76%;
+    --radius: 1.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 335 77% 76%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 335 77% 76%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 335 77% 76%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "palt";
+    background-image: 
+      radial-gradient(
+        circle at top right,
+        hsl(335 77% 76% / 0.15),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at bottom left,
+        hsl(330 80% 92% / 0.2),
+        transparent 40%
+      );
+    background-attachment: fixed;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .scroll-fade {
+    opacity: 0;
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .scroll-fade.from-left {
+    transform: translateX(-50px);
+  }
+
+  .scroll-fade.from-right {
+    transform: translateX(50px);
+  }
+
+  .scroll-fade.from-bottom {
+    transform: translateY(50px);
+  }
+
+  .scroll-fade.visible {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .glass-card {
+    @apply bg-white/90 backdrop-blur-sm border border-white/30 shadow-lg shadow-pink-100/20;
+  }
+}
+
+/* Font settings */
+body {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, -apple-system, sans-serif;
+}
+
+/* Custom card styling */
+.card {
+  @apply rounded-3xl transition-all duration-300 hover:shadow-lg hover:shadow-pink-100/30;
+}
+
+/* Custom button styling */
+.button {
+  @apply rounded-2xl transition-all duration-300;
+}
+
+/* Custom input styling */
+.input {
+  @apply rounded-2xl border-pink-200/50 focus:border-pink-300/50 transition-colors;
+}
