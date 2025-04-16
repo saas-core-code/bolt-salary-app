@@ -19,8 +19,8 @@ export function Calculator() {
   const [usd, setUsd] = useState('');
   const [rate, setRate] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false); // 保存中状態を追加
   const [showHistory, setShowHistory] = useState(false);
-  // lastSavedAmount は使用されていないので変数名を削除
   const [, setLastSavedAmount] = useState<number | null>(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -76,7 +76,7 @@ export function Calculator() {
   const currentAmount = Number(usd) || 0;
   const { beforeTax, tax, afterTax } = calculateRewards(currentAmount, rate);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!user || !usd || Number(usd) <= 0) {
       toast({
         title: 'エラー',
@@ -86,25 +86,57 @@ export function Calculator() {
       return;
     }
 
-    const newRecord = {
-      userId: user,
-      usdAmount: Number(usd),
-      exchangeRate: rate,
-      beforeTax,
-      tax,
-      afterTax,
-    };
+    try {
+      setSaving(true); // 保存処理開始
+      
+      // Firebase Functionsにデータを送信
+      const response = await fetch("https://savereward-ubluu5vozq-uc.a.run.app", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: user,
+          dollarIncome: Number(usd)
+        })
+      });
 
-    addRecord(newRecord);
-    setLastSavedAmount(afterTax);
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.message || 'スプレッドシートへの保存に失敗しました');
+      }
 
-    toast({
-      title: 'おつかれさまでした 💐',
-      description: '今日も記録、ありがとう ✨',
-    });
+      // ローカルステート更新（元の処理を維持）
+      const newRecord = {
+        userId: user,
+        usdAmount: Number(usd),
+        exchangeRate: rate,
+        beforeTax,
+        tax,
+        afterTax,
+      };
 
-    setUsd('');
-    setShowHistory(true);
+      addRecord(newRecord);
+      setLastSavedAmount(afterTax);
+
+      toast({
+        title: 'おつかれさまでした 💐',
+        description: '今日も記録、ありがとう ✨',
+      });
+
+      setUsd('');
+      setShowHistory(true);
+    } catch (error) {
+      console.error('保存エラー:', error);
+      toast({
+        title: 'エラー',
+        description: error instanceof Error ? error.message : '保存中にエラーが発生しました。',
+        variant: 'destructive',
+      });
+    } finally {
+      setSaving(false); // 保存処理完了
+    }
   };
 
   const handleUsdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,10 +223,22 @@ export function Calculator() {
           <Button
             className="w-full h-14 text-lg rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             onClick={handleSave}
-            disabled={!usd || Number(usd) <= 0}
+            disabled={!usd || Number(usd) <= 0 || saving}
           >
-            <Sparkles className="w-5 h-5 mr-2" />
-            保存する
+            {saving ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                保存中...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5 mr-2" />
+                保存する
+              </>
+            )}
           </Button>
         </CardContent>
       </Card>
